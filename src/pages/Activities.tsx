@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Calendar, Clock, Phone, Mail, CheckSquare, Plus, CalendarDays } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Activities = () => {
+  const navigate = useNavigate();
   const upcomingEvents = [
     {
       id: 1,
@@ -134,11 +136,11 @@ const Activities = () => {
           <p className="text-muted-foreground">Manage your calendar, tasks, calls, and emails</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">
+          <Button variant="outline" onClick={() => navigate('/activities/calendar')}>
             <Calendar className="h-4 w-4 mr-2" />
             Calendar View
           </Button>
-          <Button>
+          <Button onClick={() => navigate('/activities/new')}>
             <Plus className="h-4 w-4 mr-2" />
             New Activity
           </Button>
@@ -278,14 +280,16 @@ const Activities = () => {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mx-auto mb-2">
+              <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mx-auto mb-2 cursor-pointer hover:bg-blue-200 transition-colors"
+                   onClick={() => navigate('/activities/calls')}>
                 <Phone className="h-6 w-6 text-blue-600" />
               </div>
               <div className="text-2xl font-bold">24</div>
               <div className="text-sm text-muted-foreground">Calls Made</div>
             </div>
             <div className="text-center">
-              <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mx-auto mb-2">
+              <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full mx-auto mb-2 cursor-pointer hover:bg-green-200 transition-colors"
+                   onClick={() => navigate('/activities/emails')}>
                 <Mail className="h-6 w-6 text-green-600" />
               </div>
               <div className="text-2xl font-bold">68</div>

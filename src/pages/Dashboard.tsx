@@ -9,7 +9,9 @@ import {
   ArrowUpRight, 
   ArrowDownRight,
   Plus,
-  ChevronRight
+  ChevronRight,
+  Phone,
+  Mail
 } from "lucide-react";
 import dashboardImage from "@/assets/dashboard-analytics.jpg";
 import { cn } from "@/lib/utils";
@@ -17,6 +19,14 @@ import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  
+  const quickActions = [
+    { title: "Add Lead", description: "Create a new lead record", href: "/leads/add", icon: Users, color: "bg-blue-500" },
+    { title: "New Opportunity", description: "Add an opportunity", href: "/opportunities/add", icon: Target, color: "bg-green-500" },
+    { title: "Schedule Call", description: "Schedule a new call", href: "/activities/calls", icon: Phone, color: "bg-purple-500" },
+    { title: "Send Email", description: "Compose new email", href: "/activities/emails", icon: Mail, color: "bg-orange-500" }
+  ];
+
   const metrics = [
     {
       title: "Total Leads",
@@ -116,7 +126,7 @@ const Dashboard = () => {
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
         {/* Analytics Chart */}
         <Card className="card-enhanced lg:col-span-2">
           <CardHeader>
@@ -171,6 +181,35 @@ const Dashboard = () => {
         </Card>
       </div>
 
+      {/* Quick Actions */}
+      <Card className="card-enhanced">
+        <CardHeader>
+          <CardTitle className="text-gray-900">Quick Actions</CardTitle>
+          <CardDescription>Frequently used actions to speed up your workflow</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-4">
+            {quickActions.map((action, index) => (
+              <div
+                key={index}
+                className="border border-gray-100 rounded-lg p-4 hover:border-gray-200 hover:shadow-sm transition-all cursor-pointer group"
+                onClick={() => navigate(action.href)}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-lg ${action.color} group-hover:scale-105 transition-transform`}>
+                    <action.icon className="h-4 w-4 text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-gray-900 text-sm">{action.title}</h4>
+                    <p className="text-xs text-gray-500">{action.description}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+      
       {/* Recent Deals */}
       <Card className="card-enhanced">
         <CardHeader>

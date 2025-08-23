@@ -29,6 +29,10 @@ import WonDeals from "./pages/WonDeals";
 import AddCustomer from "./pages/AddCustomer";
 import Accounts from "./pages/Accounts";
 import Contacts from "./pages/Contacts";
+import CalendarView from "./pages/CalendarView";
+import NewActivity from "./pages/NewActivity";
+import Calls from "./pages/Calls";
+import Emails from "./pages/Emails";
 
 const queryClient = new QueryClient();
 
@@ -64,10 +68,12 @@ const App = () => (
           <Route path="/support/open" element={<ModernLayout><Support /></ModernLayout>} />
           <Route path="/support/create" element={<ModernLayout><Support /></ModernLayout>} />
           <Route path="/support/knowledge" element={<ModernLayout><Support /></ModernLayout>} />
-          <Route path="/activities/calendar" element={<ModernLayout><Activities /></ModernLayout>} />
+          <Route path="/activities" element={<ModernLayout><Activities /></ModernLayout>} />
+          <Route path="/activities/calendar" element={<ModernLayout><CalendarView /></ModernLayout>} />
+          <Route path="/activities/new" element={<ModernLayout><NewActivity /></ModernLayout>} />
           <Route path="/activities/tasks" element={<ModernLayout><Activities /></ModernLayout>} />
-          <Route path="/activities/calls" element={<ModernLayout><Activities /></ModernLayout>} />
-          <Route path="/activities/emails" element={<ModernLayout><Activities /></ModernLayout>} />
+          <Route path="/activities/calls" element={<ModernLayout><Calls /></ModernLayout>} />
+          <Route path="/activities/emails" element={<ModernLayout><Emails /></ModernLayout>} />
           <Route path="/reports/sales" element={<ModernLayout><Reports /></ModernLayout>} />
           <Route path="/reports/leads" element={<ModernLayout><Reports /></ModernLayout>} />
           <Route path="/reports/activities" element={<ModernLayout><Reports /></ModernLayout>} />
