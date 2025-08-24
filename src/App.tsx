@@ -33,6 +33,9 @@ import CalendarView from "./pages/CalendarView";
 import NewActivity from "./pages/NewActivity";
 import Calls from "./pages/Calls";
 import Emails from "./pages/Emails";
+import AddContact from "./pages/AddContact";
+import CreateTicket from "./pages/CreateTicket";
+import OpenTickets from "./pages/OpenTickets";
 
 const queryClient = new QueryClient();
 
@@ -64,9 +67,10 @@ const App = () => (
           <Route path="/customers/add" element={<ModernLayout><AddCustomer /></ModernLayout>} />
           <Route path="/customers/accounts" element={<ModernLayout><Accounts /></ModernLayout>} />
           <Route path="/customers/contacts" element={<ModernLayout><Contacts /></ModernLayout>} />
+          <Route path="/customers/contacts/add" element={<ModernLayout><AddContact /></ModernLayout>} />
           <Route path="/support" element={<ModernLayout><Support /></ModernLayout>} />
-          <Route path="/support/open" element={<ModernLayout><Support /></ModernLayout>} />
-          <Route path="/support/create" element={<ModernLayout><Support /></ModernLayout>} />
+          <Route path="/support/open" element={<ModernLayout><OpenTickets /></ModernLayout>} />
+          <Route path="/support/create" element={<ModernLayout><CreateTicket /></ModernLayout>} />
           <Route path="/support/knowledge" element={<ModernLayout><Support /></ModernLayout>} />
           <Route path="/activities" element={<ModernLayout><Activities /></ModernLayout>} />
           <Route path="/activities/calendar" element={<ModernLayout><CalendarView /></ModernLayout>} />

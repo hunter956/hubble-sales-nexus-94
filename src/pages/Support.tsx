@@ -12,8 +12,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Plus, Search, Filter, Clock, AlertCircle, CheckCircle, Ticket } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Support = () => {
+  const navigate = useNavigate();
   const tickets = [
     {
       id: "T-001",
@@ -92,10 +94,15 @@ const Support = () => {
           <h1 className="text-3xl font-bold">Support Tickets</h1>
           <p className="text-muted-foreground">Manage customer support requests and issues</p>
         </div>
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          Create Ticket
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => navigate('/support/open')}>
+            Open Tickets
+          </Button>
+          <Button onClick={() => navigate('/support/create')}>
+            <Plus className="h-4 w-4 mr-2" />
+            Create Ticket
+          </Button>
+        </div>
       </div>
 
       {/* Stats Cards */}

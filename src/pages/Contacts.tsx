@@ -205,7 +205,7 @@ const Contacts = () => {
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
-          <Button onClick={() => navigate('/add-customer')}>
+          <Button onClick={() => navigate('/customers/contacts/add')}>
             <Plus className="h-4 w-4 mr-2" />
             Add Contact
           </Button>

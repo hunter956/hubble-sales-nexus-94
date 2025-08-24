@@ -1,6 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { 
   Users, 
   Target, 
@@ -9,9 +11,21 @@ import {
   ArrowUpRight, 
   ArrowDownRight,
   Plus,
-  ChevronRight,
   Phone,
-  Mail
+  Mail,
+  Calendar,
+  Zap,
+  BarChart3,
+  Activity,
+  Clock,
+  Star,
+  Building,
+  CheckCircle2,
+  AlertTriangle,
+  MessageSquare,
+  UserPlus,
+  FileText,
+  Briefcase
 } from "lucide-react";
 import dashboardImage from "@/assets/dashboard-analytics.jpg";
 import { cn } from "@/lib/utils";
@@ -21,20 +35,78 @@ const Dashboard = () => {
   const navigate = useNavigate();
   
   const quickActions = [
-    { title: "Add Lead", description: "Create a new lead record", href: "/leads/add", icon: Users, color: "bg-blue-500" },
-    { title: "New Opportunity", description: "Add an opportunity", href: "/opportunities/add", icon: Target, color: "bg-green-500" },
-    { title: "Schedule Call", description: "Schedule a new call", href: "/activities/calls", icon: Phone, color: "bg-purple-500" },
-    { title: "Send Email", description: "Compose new email", href: "/activities/emails", icon: Mail, color: "bg-orange-500" }
+    { 
+      title: "Add Lead", 
+      description: "Create new prospect", 
+      href: "/leads/add", 
+      icon: UserPlus, 
+      color: "from-blue-500 to-blue-600",
+      gradient: true
+    },
+    { 
+      title: "New Opportunity", 
+      description: "Track new deal", 
+      href: "/opportunities/add", 
+      icon: Target, 
+      color: "from-emerald-500 to-emerald-600",
+      gradient: true
+    },
+    { 
+      title: "Schedule Call", 
+      description: "Book a meeting", 
+      href: "/activities/calls", 
+      icon: Phone, 
+      color: "from-purple-500 to-purple-600",
+      gradient: true
+    },
+    { 
+      title: "Send Email", 
+      description: "Reach out now", 
+      href: "/activities/emails", 
+      icon: Mail, 
+      color: "from-orange-500 to-orange-600",
+      gradient: true
+    },
+    { 
+      title: "Add Contact", 
+      description: "New connection", 
+      href: "/customers/contacts/add", 
+      icon: Users, 
+      color: "from-cyan-500 to-cyan-600",
+      gradient: true
+    },
+    { 
+      title: "Create Report", 
+      description: "Generate insights", 
+      href: "/create-report", 
+      icon: FileText, 
+      color: "from-pink-500 to-pink-600",
+      gradient: true
+    }
   ];
 
   const metrics = [
     {
-      title: "Total Leads",
-      value: "2,847",
+      title: "Total Revenue",
+      value: "$2.4M",
+      change: "+18.2%",
+      trend: "up",
+      icon: DollarSign,
+      description: "This quarter",
+      color: "text-emerald-600",
+      bgColor: "bg-emerald-50",
+      iconColor: "text-emerald-600"
+    },
+    {
+      title: "Active Leads",
+      value: "3,847",
       change: "+12.5%",
       trend: "up",
       icon: Users,
-      color: "bg-blue-600"
+      description: "In pipeline",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50",
+      iconColor: "text-blue-600"
     },
     {
       title: "Opportunities",
@@ -42,15 +114,10 @@ const Dashboard = () => {
       change: "+8.2%", 
       trend: "up",
       icon: Target,
-      color: "bg-emerald-600"
-    },
-    {
-      title: "Revenue",
-      value: "$1.2M",
-      change: "+15.3%",
-      trend: "up", 
-      icon: DollarSign,
-      color: "bg-green-600"
+      description: "Open deals",
+      color: "text-purple-600",
+      bgColor: "bg-purple-50",
+      iconColor: "text-purple-600"
     },
     {
       title: "Conversion Rate",
@@ -58,191 +125,375 @@ const Dashboard = () => {
       change: "-2.1%",
       trend: "down",
       icon: TrendingUp,
-      color: "bg-indigo-600"
+      description: "Lead to customer",
+      color: "text-orange-600",
+      bgColor: "bg-orange-50",
+      iconColor: "text-orange-600"
     }
   ];
 
-  const recentLeads = [
-    { name: "Sarah Johnson", company: "TechCorp Inc", value: "$45,000", status: "Hot", initials: "SJ" },
-    { name: "Michael Chen", company: "StartupXYZ", value: "$23,000", status: "Warm", initials: "MC" },
-    { name: "Emily Davis", company: "Global Solutions", value: "$67,000", status: "Hot", initials: "ED" },
-    { name: "Robert Wilson", company: "InnovateCo", value: "$34,000", status: "Cold", initials: "RW" },
+  const recentActivities = [
+    { 
+      type: "call", 
+      title: "Call with TechCorp CEO", 
+      time: "2 hours ago", 
+      status: "completed",
+      contact: "John Smith"
+    },
+    { 
+      type: "email", 
+      title: "Proposal sent to StartupXYZ", 
+      time: "4 hours ago", 
+      status: "pending",
+      contact: "Jane Doe"
+    },
+    { 
+      type: "meeting", 
+      title: "Demo scheduled", 
+      time: "6 hours ago", 
+      status: "upcoming",
+      contact: "Mike Johnson"
+    },
+    { 
+      type: "deal", 
+      title: "Deal closed - $45K", 
+      time: "1 day ago", 
+      status: "won",
+      contact: "Sarah Wilson"
+    }
   ];
 
-  const recentDeals = [
-    { name: "Enterprise Package - ABC Corp", value: "$125,000", stage: "Negotiation", probability: 80 },
-    { name: "Software License - TechStart", value: "$45,000", stage: "Proposal", probability: 60 },
-    { name: "Consulting Services - MegaCorp", value: "$78,000", stage: "Demo", probability: 45 },
+  const upcomingTasks = [
+    { 
+      title: "Follow up with Global Solutions", 
+      time: "Today 2:00 PM", 
+      priority: "high",
+      type: "call"
+    },
+    { 
+      title: "Send proposal to InnovateCo", 
+      time: "Tomorrow 9:00 AM", 
+      priority: "medium",
+      type: "email"
+    },
+    { 
+      title: "Product demo presentation", 
+      time: "Tomorrow 3:00 PM", 
+      priority: "high",
+      type: "meeting"
+    },
+    { 
+      title: "Weekly sales report", 
+      time: "Friday 5:00 PM", 
+      priority: "low",
+      type: "task"
+    }
   ];
 
-  const getStatusBadge = (status: string) => {
-    const variants = {
-      Hot: "bg-red-100 text-red-700 border-red-200",
-      Warm: "bg-orange-100 text-orange-700 border-orange-200", 
-      Cold: "bg-blue-100 text-blue-700 border-blue-200"
-    };
-    return variants[status as keyof typeof variants] || variants.Cold;
+  const topDeals = [
+    { 
+      company: "Enterprise Corp", 
+      value: "$125,000", 
+      stage: "Negotiation", 
+      probability: 85,
+      closeDate: "This week"
+    },
+    { 
+      company: "TechStart Inc", 
+      value: "$78,000", 
+      stage: "Proposal", 
+      probability: 65,
+      closeDate: "Next week"
+    },
+    { 
+      company: "Global Dynamics", 
+      value: "$156,000", 
+      stage: "Demo", 
+      probability: 45,
+      closeDate: "This month"
+    }
+  ];
+
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case "call": return Phone;
+      case "email": return Mail;
+      case "meeting": return Calendar;
+      case "deal": return DollarSign;
+      default: return Activity;
+    }
+  };
+
+  const getActivityColor = (status: string) => {
+    switch (status) {
+      case "completed": return "text-green-600 bg-green-50";
+      case "pending": return "text-yellow-600 bg-yellow-50";
+      case "upcoming": return "text-blue-600 bg-blue-50";
+      case "won": return "text-emerald-600 bg-emerald-50";
+      default: return "text-gray-600 bg-gray-50";
+    }
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case "high": return "border-red-200 bg-red-50";
+      case "medium": return "border-yellow-200 bg-yellow-50";
+      case "low": return "border-green-200 bg-green-50";
+      default: return "border-gray-200 bg-gray-50";
+    }
   };
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-1">Welcome back, John! Here's what's happening with your business.</p>
+    <div className="space-y-8 p-1">
+      {/* Modern Header */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-primary/80 p-8 text-white">
+        <div className="relative z-10">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold mb-2">Welcome back, John! 👋</h1>
+              <p className="text-lg text-white/90 mb-6">Here's what's happening with your business today</p>
+              <div className="flex items-center gap-6 text-sm">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4" />
+                  <span>8 deals closed this week</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="h-4 w-4" />
+                  <span>Top performer this month</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  <span>Revenue up 18.2%</span>
+                </div>
+              </div>
+            </div>
+            <Button 
+              size="lg" 
+              className="bg-white text-primary hover:bg-white/90 shadow-lg"
+              onClick={() => navigate('/quick-add')}
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Quick Add
+            </Button>
+          </div>
         </div>
-        <Button className="btn-primary shadow-sm" onClick={() => navigate('/quick-add')}>
-          <Plus className="h-4 w-4 mr-2" />
-          Quick Add
-        </Button>
+        <div className="absolute inset-0 bg-grid-white/[0.05] bg-[size:20px_20px]" />
+        <div className="absolute top-0 right-0 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
       </div>
 
-      {/* Metrics Cards */}
+      {/* Metrics Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {metrics.map((metric) => (
-          <Card key={metric.title} className="card-enhanced">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-sm font-medium text-gray-600">{metric.title}</CardTitle>
-              <div className={cn("p-2 rounded-lg", metric.color)}>
-                <metric.icon className="h-4 w-4 text-white" />
+        {metrics.map((metric, index) => (
+          <Card key={metric.title} className="relative overflow-hidden border-0 shadow-md hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className={cn("p-3 rounded-xl", metric.bgColor)}>
+                  <metric.icon className={cn("h-6 w-6", metric.iconColor)} />
+                </div>
+                <Badge variant="secondary" className="text-xs">
+                  {metric.description}
+                </Badge>
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-900 mb-1">{metric.value}</div>
-              <div className="flex items-center text-sm">
-                {metric.trend === "up" ? (
-                  <ArrowUpRight className="h-3 w-3 text-green-600 mr-1" />
-                ) : (
-                  <ArrowDownRight className="h-3 w-3 text-red-600 mr-1" />
-                )}
-                <span className={metric.trend === "up" ? "text-green-600" : "text-red-600"}>
-                  {metric.change}
-                </span>
-                <span className="text-gray-500 ml-1">from last month</span>
+              <div className="space-y-2">
+                <h3 className="text-sm font-medium text-muted-foreground">{metric.title}</h3>
+                <div className="flex items-end justify-between">
+                  <span className="text-3xl font-bold">{metric.value}</span>
+                  <div className="flex items-center gap-1 text-sm">
+                    {metric.trend === "up" ? (
+                      <ArrowUpRight className="h-4 w-4 text-green-600" />
+                    ) : (
+                      <ArrowDownRight className="h-4 w-4 text-red-600" />
+                    )}
+                    <span className={metric.trend === "up" ? "text-green-600" : "text-red-600"}>
+                      {metric.change}
+                    </span>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
-        {/* Analytics Chart */}
-        <Card className="card-enhanced lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-gray-900">Sales Analytics</CardTitle>
-            <CardDescription>Monthly performance overview and trends</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="h-64 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl flex items-center justify-center overflow-hidden border border-blue-100">
-              <img 
-                src={dashboardImage} 
-                alt="Sales Analytics Chart" 
-                className="w-full h-full object-cover rounded-xl"
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Recent Leads */}
-        <Card className="card-enhanced">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-gray-900">Recent Leads</CardTitle>
-              <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
-                View all <ChevronRight className="h-3 w-3 ml-1" />
-              </Button>
-            </div>
-            <CardDescription>Latest prospects added to your pipeline</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentLeads.map((lead, index) => (
-                <div key={index} className="flex items-center justify-between group">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-primary text-white text-xs font-medium flex items-center justify-center">
-                      {lead.initials}
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-900 text-sm">{lead.name}</p>
-                      <p className="text-xs text-gray-500">{lead.company}</p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-gray-900 text-sm">{lead.value}</p>
-                    <Badge className={cn("text-xs border", getStatusBadge(lead.status))}>
-                      {lead.status}
-                    </Badge>
-                  </div>
+      <div className="grid gap-6 lg:grid-cols-12">
+        {/* Main Analytics Section */}
+        <div className="lg:col-span-8 space-y-6">
+          {/* Analytics Chart */}
+          <Card className="border-0 shadow-md">
+            <CardHeader className="pb-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-xl">Revenue Analytics</CardTitle>
+                  <CardDescription>Monthly performance and forecasting</CardDescription>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm">
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    Export
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Range
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-80 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 rounded-xl flex items-center justify-center overflow-hidden border border-blue-100/50">
+                <img 
+                  src={dashboardImage} 
+                  alt="Revenue Analytics Dashboard" 
+                  className="w-full h-full object-cover rounded-xl opacity-90"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Quick Actions Grid */}
+          <Card className="border-0 shadow-md">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5 text-primary" />
+                Quick Actions
+              </CardTitle>
+              <CardDescription>Frequently used actions to accelerate your workflow</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                {quickActions.map((action, index) => (
+                  <div
+                    key={index}
+                    className="group relative overflow-hidden rounded-xl border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all cursor-pointer"
+                    onClick={() => navigate(action.href)}
+                  >
+                    {action.gradient ? (
+                      <div className={`absolute inset-0 bg-gradient-to-br ${action.color} opacity-5 group-hover:opacity-10 transition-opacity`} />
+                    ) : (
+                      <div className={`absolute inset-0 ${action.color} opacity-5 group-hover:opacity-10 transition-opacity`} />
+                    )}
+                    <div className="relative p-4">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className={cn(
+                          "p-2 rounded-lg group-hover:scale-105 transition-transform",
+                          action.gradient ? `bg-gradient-to-br ${action.color}` : action.color
+                        )}>
+                          <action.icon className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-sm">{action.title}</h4>
+                          <p className="text-xs text-muted-foreground">{action.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Sidebar */}
+        <div className="lg:col-span-4 space-y-6">
+          {/* Recent Activities */}
+          <Card className="border-0 shadow-md">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2">
+                <Activity className="h-5 w-5 text-primary" />
+                Recent Activities
+              </CardTitle>
+              <CardDescription>Latest team actions</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {recentActivities.map((activity, index) => {
+                  const IconComponent = getActivityIcon(activity.type);
+                  return (
+                    <div key={index} className="flex items-start gap-3">
+                      <div className={cn("p-2 rounded-lg", getActivityColor(activity.status))}>
+                        <IconComponent className="h-4 w-4" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm">{activity.title}</p>
+                        <p className="text-xs text-muted-foreground">{activity.contact}</p>
+                        <p className="text-xs text-muted-foreground">{activity.time}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Upcoming Tasks */}
+          <Card className="border-0 shadow-md">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5 text-primary" />
+                Upcoming Tasks
+              </CardTitle>
+              <CardDescription>What's on your agenda</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {upcomingTasks.map((task, index) => (
+                  <div key={index} className={cn("p-3 rounded-lg border", getPriorityColor(task.priority))}>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <p className="font-medium text-sm">{task.title}</p>
+                        <p className="text-xs text-muted-foreground">{task.time}</p>
+                      </div>
+                      <Badge 
+                        className={cn(
+                          "text-xs",
+                          task.priority === "high" ? "bg-red-100 text-red-700" :
+                          task.priority === "medium" ? "bg-yellow-100 text-yellow-700" :
+                          "bg-green-100 text-green-700"
+                        )}
+                      >
+                        {task.priority}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Top Deals */}
+          <Card className="border-0 shadow-md">
+            <CardHeader className="pb-4">
+              <CardTitle className="flex items-center gap-2">
+                <Briefcase className="h-5 w-5 text-primary" />
+                Priority Deals
+              </CardTitle>
+              <CardDescription>Deals requiring attention</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {topDeals.map((deal, index) => (
+                  <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <h4 className="font-medium text-sm">{deal.company}</h4>
+                        <p className="text-xs text-muted-foreground">{deal.closeDate}</p>
+                      </div>
+                      <span className="font-bold text-lg">{deal.value}</span>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">{deal.stage}</span>
+                        <span className="font-medium">{deal.probability}%</span>
+                      </div>
+                      <Progress value={deal.probability} className="h-2" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      {/* Quick Actions */}
-      <Card className="card-enhanced">
-        <CardHeader>
-          <CardTitle className="text-gray-900">Quick Actions</CardTitle>
-          <CardDescription>Frequently used actions to speed up your workflow</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4">
-            {quickActions.map((action, index) => (
-              <div
-                key={index}
-                className="border border-gray-100 rounded-lg p-4 hover:border-gray-200 hover:shadow-sm transition-all cursor-pointer group"
-                onClick={() => navigate(action.href)}
-              >
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${action.color} group-hover:scale-105 transition-transform`}>
-                    <action.icon className="h-4 w-4 text-white" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 text-sm">{action.title}</h4>
-                    <p className="text-xs text-gray-500">{action.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-      
-      {/* Recent Deals */}
-      <Card className="card-enhanced">
-        <CardHeader>
-          <CardTitle className="text-gray-900">Active Opportunities</CardTitle>
-          <CardDescription>Your highest priority deals in the pipeline</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {recentDeals.map((deal, index) => (
-              <div key={index} className="border border-gray-100 rounded-lg p-4 hover:border-gray-200 transition-colors">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="font-medium text-gray-900">{deal.name}</h4>
-                  <span className="font-bold text-lg text-gray-900">{deal.value}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <Badge variant="outline" className="border-blue-200 text-blue-700 bg-blue-50">
-                    {deal.stage}
-                  </Badge>
-                  <div className="flex items-center gap-2">
-                    <div className="w-16 bg-gray-200 rounded-full h-2">
-                      <div 
-                        className="bg-primary h-2 rounded-full transition-all duration-300" 
-                        style={{ width: `${deal.probability}%` }}
-                      />
-                    </div>
-                    <span className="text-sm font-medium text-gray-600">{deal.probability}%</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
